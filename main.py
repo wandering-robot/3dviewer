@@ -13,8 +13,7 @@ class Window:
         self.space = Space(self.t0)
 
         #initialize pygame
-        py.init()
-        self.size = (1000,1000)
+        self.size = (500,500)
         self.display_window = py.display.set_mode((self.size))
         self.background = py.Surface(self.display_window.get_size()).convert()
         self.background.fill((0, 0, 128))
@@ -25,8 +24,9 @@ class Window:
     def run(self):
         while self.running:
             self.transfer_dim()             #recalculate the a b values for each 3d point using the greeks
-            self.update_image()             #draw each point on the screen given the a b 
             self.check_user_action()        #see if user wants to update the greeks
+            if self.running:
+                self.update_image()             #draw each point on the screen given the a b 
 
     def transfer_dim(self):
         self.space.update_objects_ab()
@@ -34,6 +34,7 @@ class Window:
     def update_image(self):
 
         self.display_window.blit(self.background,(0,0))
+        self.background.fill((0, 0, 128))
         for obj in self.space.objs:
             for point in obj.points:
                 py.draw.circle(self.background,obj.colour,(int(point.a + self.size[0]/2),int(point.b + self.size[1]/2)),1)
@@ -47,9 +48,9 @@ class Window:
                 py.quit()
             elif event.type == py.KEYDOWN:
                 if event.key == py.K_w:
-                    self.space.gamma -= self.interval
+                    self.space.gamma -= 2*self.interval
                 elif event.key == py.K_s:
-                    self.space.gamma += self.interval
+                    self.space.gamma += 2*self.interval
                 elif event.key == py.K_d:
                     self.space.alpha += self.interval
                 elif event.key == py.K_a:
@@ -60,4 +61,5 @@ class Window:
 
 
 if __name__ == "__main__":
+    py.init()
     win = Window()

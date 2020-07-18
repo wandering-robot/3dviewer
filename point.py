@@ -10,4 +10,4 @@ class Point:
         self.b = None
 
     def __repr__(self):
-        return f'(x:{self.x} y:{self.y} z:{self.z})'
+        return f'(x:{self.x:.2f} y:{self.y:.2f} z:{self.z:.2f})\t(a:{self.a:.2f} b:{self.b:.2f})'
