@@ -22,7 +22,7 @@ class Space:
 
     def update_objects_ab(self):   #translates the points (x,y,z) into (a,b)
         for obj in self.objs:
-            for point in obj.points:
+            for point in obj.points.values():
                 top = point.x*cos(self.alpha) + point.y*sin(self.alpha) + point.z*cos(self.gamma)
                 t = top/(self.epsilon**(3/2) - self.epsilon)
                 #point of intersection with the point's vector and the plane
@@ -34,6 +34,10 @@ class Space:
                 #dot product wv with the plane's basis vectors to get respective a b coordinates
                 point.a = wv.dot(self.plane.av)
                 point.b = wv.dot(self.plane.bv)
+                point.pixel = (point.a,point.b)
+            #additional code to update the ab values of the lines by making the lines reevaluate their points ab values
+            for edge in obj.edges:
+                edge.update_ab()
 
 
 class Plane:
