@@ -5,9 +5,13 @@ from math import pi,sqrt,cos,sin
 class Space:
     def __init__(self,plane_t=50):
         self.objs = []
-
+        #actual angles for the viewing plane
         self.alpha = pi/4
         self.gamma = pi/4
+        #rate of change for the angles of the viewing plane
+        self.delta_alpha = 0
+        self.delta_gamma = 0
+
         self.epsilon = (1 + cos(self.gamma)**2)
 
         self.plane_t = plane_t
