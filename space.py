@@ -1,4 +1,5 @@
 from obj import Obj
+from point import Point
 from vector import Vector
 from math import pi,sqrt,cos,sin
 
@@ -62,6 +63,9 @@ class Plane:
         self.x0 = self.d0 * cos(self.space.alpha)
         self.y0 = self.d0 * sin(self.space.alpha)
         self.z0 = self.d0 * cos(self.space.gamma)
+
+        self.center = (self.x0,self.y0,self.z0)
+        self.center_point = Point(*self.center)
 
         self.update_basis()
 

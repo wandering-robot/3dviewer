@@ -1,9 +1,13 @@
-from point import Point, Edge
+from point import Point, Edge, Face
+
+from math import pi,sin,cos,sqrt
 
 class Obj:
     def __init__(self,name,size,center=(0,0,0)):
         self.points = {}
+        self.points_list = []   #litterally just to be able to start iterating through points
         self.edges = []
+        self.faces = []
 
         self.center = center
         self.shape_name = name.lower()
@@ -19,12 +23,18 @@ class Obj:
         if self.shape_name == 'cube':
             self.create_cube_points()
             self.create_cube_edges()
+            self.create_cube_faces()
 
     def add_point(self,tup):
-        self.points[tup] = Point(*tup)
+        point = Point(*tup)
+        self.points[tup] = point
+        self.points_list.append(point)
 
     def add_edge(self,p1,p2):
         self.edges.append(Edge(p1,p2))
+
+    def add_face(self,face_center,point_list):
+        self.faces.append(Face(face_center,point_list))
 
     def create_cube_points(self):
         for i in [self.center[0]-self.size, self.center[0]+self.size]:
@@ -48,19 +58,42 @@ class Obj:
         self._edge_rec(start)
 
     def _edge_rec(self,point):
-        # if point.edge_num == len(point.neighbours):
-        #     return True
-        # else:
         while point.edge2build:
             neighbour = point.edge2build[0]
             self.add_edge(point,neighbour)
-            # point.edge_num += 1
-            # neighbour.edge_num += 1
             neighbour.edge2build.remove(point)
             point.edge2build.remove(neighbour)
             self._edge_rec(neighbour)
 
+    def create_cube_faces(self):
+        for dim in range(3):                                       #dealing with the dim axis
+            for pos_neg in [-1,1]:                                  #dealing with the pos_neg side of the dim axis
+                face_center = [0,0,0]
+                face_center[dim] = self.center[dim] + pos_neg*self.size
+                theta = pi/4
+                r = self.size*sqrt(2)
+                face_points = []
+                for _ in range(5):
+                    vals = (r*cos(theta), r*sin(theta))
+                    coord = face_center.copy()
+                    j = 0
+                    for i in range(3):
+                        if i == dim:
+                            continue
+                        else:
+                            coord[i] = round(vals[j]+self.center[i])
+                            j += 1
+                    point = self.points[tuple(coord)]
+                    face_points.append(point)
+                    theta += pi/2
+                self.add_face(face_center,face_points)
+                    
 
+                    
+
+                 
+
+                
 
 
 

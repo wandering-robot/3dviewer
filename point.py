@@ -1,4 +1,5 @@
 from math import sqrt
+from random import randint
 
 class Point:
     def __init__(self,x,y,z):
@@ -45,3 +46,21 @@ class Edge:
     def update_ab(self):
         self.ab1 = (int(self.p1.a), int(self.p1.b))
         self.ab2 = (int(self.p2.a), int(self.p2.b))
+
+class Face:
+    def __init__(self,center,point_list):
+        self.center = Point(*center)
+        self.point_list = point_list
+        self.colour = self.get_random_colour()
+
+    def __repr__(self):
+        return f'{self.center.tup}'
+
+    @staticmethod
+    def get_random_colour():
+        return (randint(0,255),randint(0,255),randint(0,255))
+
+    def points2pixels(self):
+        self.pixel_list = []
+        for point in self.point_list:
+            self.pixel_list.append(point.pixel)
